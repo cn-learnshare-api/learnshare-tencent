@@ -30,7 +30,7 @@ public class TencentWxMpLoginApi {
 		params.put("secret", secret);
 		params.put("js_code", code);
 		params.put("grant_type", "authorization_code");
-		return RequestCommon.doGet("/sns/jscode2session", null, params);
+		return RequestCommon.doGet("/sns/jscode2session", params);
 	}
 
 }

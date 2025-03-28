@@ -13,6 +13,35 @@ import java.util.Map;
  * @since 1.0.0
  */
 public class TencentWxMpQRCodeApi {
+	
+	/**
+	 * createQRCode
+	 *
+	 * @param accessToken is the access token of wechat mini program
+	 * @param params is the params of wechat mini program
+	 * @return byte[] is the byte array of qrcode image
+	 *  @version 1.0.1
+	 *  @since 1.0.1
+	 * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/qrcode-link/qr-code/createQRCode.html">Official Website</a>
+	 */
+	public static byte[] createQRCode(String accessToken, Map<String, Object> params) {
+		return RequestCommon.doPostForByte("/cgi-bin/wxaapp/createwxaqrcode?access_token=" + accessToken, params);
+	}
+	
+	/**
+	 * createQRCode
+	 *
+	 * @param accessToken is the access token of wechat mini program
+	 * @param params is the params of wechat mini program
+	 * @param savePath is the save path of qrcode image
+	 * @return boolean is the result of save qrcode image
+	 *  @version 1.0.1
+	 *  @since 1.0.1
+	 * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/qrcode-link/qr-code/createQRCode.html">Official Website</a>
+	 */
+	public static Boolean createQRCode(String accessToken, Map<String, Object> params, String savePath) {
+		return FileImageUtils.writeByteToFile(createQRCode(accessToken, params), savePath);
+	}
 
 	/**
 	 * getQRCode
@@ -23,7 +52,7 @@ public class TencentWxMpQRCodeApi {
 	 * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/qrcode-link/qr-code/getQRCode.html">Official Website</a>
 	 */
 	public static byte[] getQRCode(String accessToken, Map<String, Object> params) {
-		return RequestCommon.doPostForByte("/wxa/getwxacode?access_token=" + accessToken, null, params);
+		return RequestCommon.doPostForByte("/wxa/getwxacode?access_token=" + accessToken, params);
 	}
 
 	/**
@@ -48,7 +77,7 @@ public class TencentWxMpQRCodeApi {
 	 * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/qrcode-link/qr-code/getUnlimitedQRCode.html">Official Website</a>
 	 */
 	public static byte[] getUnlimitedQRCode(String accessToken, Map<String, Object> params) {
-		return RequestCommon.doPostForByte("/wxa/getwxacodeunlimit?access_token=" + accessToken, null, params);
+		return RequestCommon.doPostForByte("/wxa/getwxacodeunlimit?access_token=" + accessToken, params);
 	}
 
 	/**

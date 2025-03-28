@@ -28,7 +28,7 @@ public class TencentWxApi {
 		params.put("grant_type", "client_credential");
 		params.put("appid", appId);
 		params.put("secret", secret);
-		return RequestCommon.doGet("/cgi-bin/token", null, params);
+		return RequestCommon.doGet("/cgi-bin/token", params);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class TencentWxApi {
 		params.put("appid", appId);
 		params.put("secret", secret);
 		params.put("force_refresh", forceRefresh);
-		return RequestCommon.doPost("/cgi-bin/stable_token", null, params);
+		return RequestCommon.doPost("/cgi-bin/stable_token", params);
 	}
 
 }

@@ -36,7 +36,28 @@ public class RequestCommon {
 	private static final String base = "https://api.weixin.qq.com";
 
 	/**
-	 * do get
+	 * do get request
+	 *
+	 * @param url is the request url
+	 * @return JSONObject
+	 */
+	public static JSONObject doGet(String url) {
+		return doGet(url, null, null);
+	}
+	
+	/**
+	 * do get request
+	 *
+	 * @param url is the request url
+	 * @param params is the request params
+	 * @return JSONObject
+	 */
+	public static JSONObject doGet(String url, Map<String, String> params) {
+		return doGet(url, null, params);
+	}
+	
+	/**
+	 * do get request
 	 *
 	 * @param url is the request url
 	 * @param headers is the request headers
@@ -55,9 +76,8 @@ public class RequestCommon {
 				}
 			}
 			HttpGet http = new HttpGet(uriBuilder.build());
-			RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
-			http.setConfig(requestConfig);
 			packageHeader(headers, http);
+			packageConfig(http);
 			return buildJsonResult(getHttpClientResult(response, client, http));
 		} catch (Exception e){
 			e.printStackTrace();
@@ -66,7 +86,28 @@ public class RequestCommon {
 			release(response, client);
 		}
 	}
-
+	
+	/**
+	 * do post
+	 *
+	 * @param url is the request url
+	 * @return JSONObject
+	 */
+	public static JSONObject doPost(String url) {
+		return doPost(url, null, null);
+	}
+	
+	/**
+	 * do post
+	 *
+	 * @param url is the request url
+	 * @param params is the request params
+	 * @return JSONObject
+	 */
+	public static JSONObject doPost(String url, Map<String, Object> params) {
+		return doPost(url, null, params);
+	}
+	
 	/**
 	 * do post
 	 *
@@ -80,9 +121,8 @@ public class RequestCommon {
 		CloseableHttpResponse response = null;
 		try {
 			HttpPost http = new HttpPost(packageUrl(url));
-			RequestConfig config = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
-			http.setConfig(config);
 			packageHeader(headers, http);
+			packageConfig(http);
 			packageParam(params, http);
 			return buildJsonResult(getHttpClientResult(response, client, http));
 		} catch (Exception e){
@@ -92,7 +132,28 @@ public class RequestCommon {
 			release(response, client);
 		}
 	}
-
+	
+	/**
+	 * do post for byte
+	 *
+	 * @param url is the request url
+	 * @return byte[] is the response byte array
+	 */
+	public static byte[] doPostForByte(String url) {
+		return doPostForByte(url, null, null);
+	}
+	
+	/**
+	 * do post for byte
+	 *
+	 * @param url is the request url
+	 * @param params is the request params
+	 * @return byte[] is the response byte array
+	 */
+	public static byte[] doPostForByte(String url, Map<String, Object> params) {
+		return doPostForByte(url, null, params);
+	}
+	
 	/**
 	 * do post for byte
 	 *
@@ -107,9 +168,8 @@ public class RequestCommon {
 		ByteArrayOutputStream out = null;
 		try {
 			HttpPost http = new HttpPost(packageUrl(url));
-			RequestConfig config = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
-			http.setConfig(config);
 			packageHeader(headers, http);
+			packageConfig(http);
 			packageParam(params, http);
 			HttpEntity entity = getHttpClientResult(response, client, http);
 			if (entity != null) {
@@ -147,32 +207,70 @@ public class RequestCommon {
 	/**
 	 * package header
 	 *
-	 * @param params is the request headers
-	 * @param httpMethod is the request method
+	 * @param headers is the request headers
+	 * @param http is the request method
 	 */
-	public static void packageHeader(Map<String, String> params, HttpRequestBase httpMethod) {
-		if (params != null) {
-			Set<Map.Entry<String, String>> entrySet = params.entrySet();
+	public static void packageHeader(Map<String, String> headers, HttpPost http) {
+		if (headers != null) {
+			Set<Map.Entry<String, String>> entrySet = headers.entrySet();
 			for (Map.Entry<String, String> entry : entrySet) {
-				httpMethod.setHeader(entry.getKey(), entry.getValue());
+				http.setHeader(entry.getKey(), entry.getValue());
 			}
 		}
 	}
-
+	
+	/**
+	 * package header
+	 *
+	 * @param headers is the request headers
+	 * @param http is the request method
+	 */
+	public static void packageHeader(Map<String, String> headers, HttpGet http) {
+		if (headers != null) {
+			Set<Map.Entry<String, String>> entrySet = headers.entrySet();
+			for (Map.Entry<String, String> entry : entrySet) {
+				http.setHeader(entry.getKey(), entry.getValue());
+			}
+		}
+	}
+	
 	/**
 	 * package param
 	 *
 	 * @param params is the request params
-	 * @param httpMethod is the request method
-	 * @throws UnsupportedEncodingException is the exception
+	 * @param http is the request method
 	 */
-	public static void packageParam(Map<String, Object> params, HttpEntityEnclosingRequestBase httpMethod) throws UnsupportedEncodingException {
+	public static void packageParam(Map<String, Object> params, HttpPost http) {
 		if (params != null) {
-			StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(params));
-			httpMethod.setEntity(stringEntity);
+			try {
+				StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(params));
+				http.setEntity(stringEntity);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
-
+	
+	/**
+	 * package config
+	 *
+	 * @param http is the request method
+	 */
+	public static void packageConfig(HttpGet http) {
+		RequestConfig config = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+		http.setConfig(config);
+	}
+	
+	/**
+	 * package config
+	 *
+	 * @param http is the request method
+	 */
+	public static void packageConfig(HttpPost http) {
+		RequestConfig config = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+		http.setConfig(config);
+	}
+	
 	/**
 	 * release
 	 *

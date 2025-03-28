@@ -17,13 +17,41 @@ public class TencentWxMpSubscribeMsgApi {
 	/**
 	 * send subscribe message
 	 *
-	 * @param accessToken is wechat mini program access token
-	 * @param params is the message params, please refer to the official documentation for details
-	 * @return the response of the request, please refer to the official documentation for details
+	 * @param accessToken is the access token of wx mini program
+	 * @param params is the params of send subscribe message
+	 * @return JSONObject is the result of send subscribe message
 	 * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-message-management/subscribe-message/sendMessage.html">Official Website</a>
 	 */
 	public static JSONObject send(String accessToken, Map<String, Object> params) {
-		return RequestCommon.doPost("/cgi-bin/message/subscribe/send?access_token=" + accessToken, null, params);
+		return RequestCommon.doPost("/cgi-bin/message/subscribe/send?access_token=" + accessToken, params);
 	}
-
+	
+	/**
+	 * add subscribe message template
+	 *
+	 * @param accessToken is the access token of wx mini program
+	 * @param params is the params of add subscribe message template
+	 * @return  JSONObject is the result of add subscribe message template
+	 * @version 1.0.1
+	 * @since 1.0.1
+	 * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-message-management/subscribe-message/addMessageTemplate.html">Official Website</a>
+	 */
+	public static JSONObject addTemplate(String accessToken, Map<String, Object> params) {
+		return RequestCommon.doPost("/wxaapi/newtmpl/addtemplate?access_token=" + accessToken, params);
+	}
+	
+	/**
+	 * del subscribe message template
+	 *
+	 * @param accessToken is the access token of wx mini program
+	 * @param params is the params of del subscribe message template
+	 * @return  JSONObject is the result of del subscribe message template
+	 * @version 1.0.1
+	 * @since 1.0.1
+	 * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-message-management/subscribe-message/deleteMessageTemplate.html">Official Website</a>
+	 */
+	public static JSONObject delTemplate(String accessToken, Map<String, Object> params) {
+		return RequestCommon.doPost("/wxaapi/newtmpl/deltemplate?access_token=" + accessToken, params);
+	}
+	
 }
